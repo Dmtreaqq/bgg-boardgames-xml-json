@@ -1,7 +1,10 @@
 import xml2js from 'xml2js'
 import { getMappedBoardgames } from './boardgameMapperService.js'
+import { getBoardgamesByIdsXML } from './bggApiService.js'
 
-export const getOriginalJsonFromXml = async (xml) => {
+export const getOriginalJsonByIds = async (ids) => {
+  const xml = await getBoardgamesByIdsXML(ids)
+
   const parser = new xml2js.Parser({
     explicitArray: false,
     attrkey: 'attr',
@@ -17,7 +20,9 @@ export const getOriginalJsonFromXml = async (xml) => {
   }
 }
 
-export const getMappedJsonFromOriginalJson = (originalJson) => {
+export const getMappedJsonByIds = async (ids) => {
+  const originalJson = await getOriginalJsonByIds(ids)
+
   const jsonObject = JSON.parse(originalJson)
   const boardgames = jsonObject.boardgames.boardgame
   const resultBoardgames = getMappedBoardgames(boardgames)

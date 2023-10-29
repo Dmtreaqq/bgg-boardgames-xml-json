@@ -13,9 +13,13 @@ export const parseGameIds = async (options) => {
   const lastPage = options.lastPageToParse
   const nextPage = 2
 
+  console.log('Started parsing...')
+
   const idsFromFirstPage = await getIdsFromFirstPage(page)
   await new Promise((r) => setTimeout(r, 10000))
   const idsFromOtherPages = await getIdsFromOtherPages(page, nextPage, lastPage)
+
+  console.log('Ended parsing.')
 
   await new Promise((r) => setTimeout(r, 10000))
   await browser.close()
