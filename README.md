@@ -10,8 +10,8 @@ It has four different functions which allow you to:
 
 1. Parse all gameIds from BGG boardgames webpage - ```parseGameIds(config)```
 2. Get boardgames by IDs in XML - ```getBoardgamesByIdsXML(idsInString)```
-3. Get boardgames by IDs in JSON - ```getOriginalJsonByIds(idsInString)```
-4. Get mapped JSON by IDs with camelCase (Also removed fields such as poll) - ```getMappedJsonByIds(idsInString)```
+3. Get boardgames by IDs in JS object - ```getOriginalBoardgames(idsInString)```
+4. Get mapped JS object by IDs with camelCase (Also removed fields such as poll) - ```getMappedOriginalBoardgames(idsInString)```
 
 ## Setup
 
@@ -29,7 +29,7 @@ Set type to "module" in package.json
 
 yourfile.js
 ```javascript
-import { parseGameIds, getBoardgamesByIdsXML, getOriginalJsonFromXml, getMappedJsonFromOriginalJson } from 'bgg-boardgames-xml-json'
+import { parseGameIds, getBoardgamesByIdsXML, getOriginalBoardgames, getMappedOriginalBoardgames } from 'bgg-boardgames-xml-json'
 
 // use functions
 ```
@@ -65,37 +65,37 @@ Or we can pass the string itself
 const xml = await getBoardgamesByIdsXML('224517,161936') // <boardgame>...</boardgame>
 ```
 
-## getOriginalJsonByIds(ids)
-### To get boardgames data from BGG in original JSON
-Same we can use parseGameIds with getOriginalJsonByIds
+## getOriginalBoardgames(ids)
+### To get boardgames data from BGG in original JS object
+Same we can use parseGameIds with getOriginalBoardgames
 ```javascript
 const ids = await parseGameIds(config) // '224517,161936'
 
-const originalJSON = await getOriginalJsonByIds(ids) // { boardgame: { boardgame: [] } }
+const originalBoardgames = await getOriginalBoardgames(ids) // { boardgame: { boardgame: [] } }
 ```
 Or we can pass the string itself
 ```javascript
-const originalJSON = await getOriginalJsonByIds('224517,161936') // { boardgame: { boardgame: [] } }
+const originalBoardgames = await getOriginalBoardgames('224517,161936') // { boardgame: { boardgame: [] } }
 ```
 
-## getMappedJsonByIds(ids)
-### To get boardgames data from BGG in original JSON
-Same we can use parseGameIds with getMappedJsonByIds
+## getMappedOriginalBoardgames(ids)
+### To get boardgames data from BGG in mapped JS object
+Same we can use parseGameIds with getMappedOriginalBoardgames
 ```javascript
 const ids = await parseGameIds(config) // '224517,161936'
 
-const originalJSON = await getMappedJsonByIds(ids) // { boardgame: [] }
+const mappedBoardgames = await getMappedOriginalBoardgames(ids) // { boardgame: [] }
 ```
 Or we can pass the string itself
 ```javascript
-const originalJSON = await getMappedJsonByIds('224517,161936') // { boardgame: [] }
+const mappedBoardgames = await getMappedOriginalBoardgames('224517,161936') // { boardgame: [] }
 ```
 
 ## Examples
 ### Read boardgames data from first three pages and write it to XML, JSON, mapped JSON
 
 ```javascript
-import { parseGameIds, getBoardgamesByIdsXML } from 'bgg-boardgames-xml-json'
+import { parseGameIds, getBoardgamesByIdsXML, getOriginalBoardgames, getMappedOriginalBoardgames } from 'bgg-boardgames-xml-json'
 import fs from 'fs/promises'
 
 const config = {
@@ -111,11 +111,11 @@ const ids = await parseGameIds(config)
 const xml = await getBoardgamesByIdsXML(ids)
 await fs.writeFile('./boardgames.xml', xml)
 
-// Get AS IS json converted from XML and save it to file
-const json = await getOriginalJsonByIds(ids)
-await fs.writeFile('./boardgames-original.json', json)
+// Get AS IS js object converted from XML and save it to file as JSON
+const originalBoardgames = await getOriginalBoardgames(ids)
+await fs.writeFile('./boardgames-original.json', originalBoardgames.toString())
 
-// Get mapped json converted from XML and save it to file
-const mappedJSON = await getMappedJsonByIds(ids)
-await fs.writeFile('./boardgames-mapped.json', mappedJSON)
+// Get mapped js object converted from XML and save it to file as JSON
+const mappedOriginalBoardgames = await getMappedOriginalBoardgames(ids)
+await fs.writeFile('./boardgames-mapped.json', mappedOriginalBoardgames.toString())
 ```
