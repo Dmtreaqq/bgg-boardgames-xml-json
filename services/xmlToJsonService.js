@@ -18,7 +18,7 @@ export const getBoardGamesArray = async (ids) => {
       const boardgame = await parseStringPromise(xmlArr[i])
       boardgamesFromXmlArray.push(boardgame)
     } catch (err) {
-      console.error('Error while parsing XML or JSON')
+      console.error('Error while parsing XML or JSON: ', err)
     }
   }
 
