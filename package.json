@@ -1,6 +1,6 @@
 {
   "name": "bgg-boardgames-xml-json",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "type": "module",
   "description": "This is a helper package to scrap data about IDs from BigGameGeek,then get those games from BGG XML API and receive result as XML or transform it to JSON, or mapped JSON",
   "main": "index.js",

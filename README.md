@@ -2,6 +2,8 @@
 
 This is a simple package only to retrieve boardgames from BigGameGeek.
 
+[![NPM Version][npm-version-image]][npm-url]
+
 Scrap IDs from website and go to XML API then transforming it to JSON :)
 
 It works only with ES Modules, hence you need set ```"type": "module"``` inside your ***package.json***
@@ -119,3 +121,6 @@ await fs.writeFile('./boardgames-original.json', originalBoardgames.toString())
 const mappedOriginalBoardgames = await getMappedOriginalBoardgames(ids)
 await fs.writeFile('./boardgames-mapped.json', mappedOriginalBoardgames.toString())
 ```
+
+[npm-version-image]: https://badgen.net/npm/v/bgg-boardgames-xml-json
+[npm-url]: bgg-boardgames-xml-json
