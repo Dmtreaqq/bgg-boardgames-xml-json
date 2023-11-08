@@ -76,16 +76,10 @@ const buildTitles = (names) => {
   if (!names) return ''
 
   if (Array.isArray(names)) {
-    return names.map((name) => ({
-      title: name.text ?? '',
-    }))
+    return names.map((name) => name.text ?? '')
   }
 
-  return [
-    {
-      title: names.text ?? '',
-    },
-  ]
+  return [names.text ?? '']
 }
 
 const buildPublishers = (publishers) => {

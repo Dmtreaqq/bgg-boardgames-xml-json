@@ -115,11 +115,11 @@ await fs.writeFile('./boardgames.xml', xml)
 
 // Get AS IS js object converted from XML and save it to file as JSON
 const originalBoardgames = await getOriginalBoardgames(ids)
-await fs.writeFile('./boardgames-original.json', originalBoardgames.toString())
+await fs.writeFile('./boardgames-original.json', JSON.stringify(originalBoardgames))
 
 // Get mapped js object converted from XML and save it to file as JSON
 const mappedOriginalBoardgames = await getMappedOriginalBoardgames(ids)
-await fs.writeFile('./boardgames-mapped.json', mappedOriginalBoardgames.toString())
+await fs.writeFile('./boardgames-mapped.json', JSON.stringify(mappedOriginalBoardgames))
 ```
 
 [npm-version-image]: https://badgen.net/npm/v/bgg-boardgames-xml-json
