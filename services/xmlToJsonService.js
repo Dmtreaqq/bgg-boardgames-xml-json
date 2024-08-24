@@ -32,7 +32,7 @@ export const getOriginalBoardgames = async (ids) => {
     gamesArray = gamesArray.concat(game.boardgames.boardgame)
 
     return gamesArray
-  }, [])
+  }, []);
 
   return JSON.stringify({
     boardgames: boardGamesArray,

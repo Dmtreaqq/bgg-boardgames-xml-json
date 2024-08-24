@@ -46,6 +46,10 @@ const signIn = async (page) => {
 const loginOnBGG = async (page, login, password) => {
   await page.goto('https://boardgamegeek.com/browse/boardgame')
 
+  const cookieAcceptButton = 'button.fc-cta-consent';
+  await page.waitForSelector(cookieAcceptButton);
+  await page.click(cookieAcceptButton);
+
   const buttonSelector = 'text/Sign In'
   await page.waitForSelector(buttonSelector)
   await page.click(buttonSelector)

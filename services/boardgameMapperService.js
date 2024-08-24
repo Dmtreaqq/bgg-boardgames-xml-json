@@ -1,32 +1,56 @@
+/**
+ * @typedef {Object} Boardgame
+ * @property {string} bggGameId - The unique id for the boardgame from BGG.
+ * @property {string} yearPublished - The year the game was published.
+ * @property {number} minPlayers - The minimum players.
+ * @property {number} maxPlayers - The maximum players.
+ * @property {number} playingTime - The time to play game
+ * @property {number} minPlayTime - The min time to play game
+ * @property {number} maxPlayTime - The max time to play game
+ * @property {boolean} isAvailable - Is the book available?
+ */
+
 export const getMappedBoardgames = (boardgames) => {
   return boardgames.map(mapperCallback)
 }
 
+/**
+ * @returns {Boardgame} Description of the return value.
+ */
 const mapperCallback = (boardgame) => {
-  const {
-    attr,
-    yearpublished,
-    minplayers,
-    maxplayers,
-    playingtime,
-    minplaytime,
-    maxplaytime,
-    age,
-    name,
-    description,
-    thumbnail,
-    image,
-    boardgameaccessory,
-    boardgamepublisher,
-    cardset,
-    boardgamedesigner,
-    boardgameartist,
-    boardgamefamily,
-    boardgamecategory,
-    boardgamemechanic,
-    boardgamesubdomain,
-    boardgameimplementation,
-  } = boardgame
+  /**
+  * @type {Boardgame}
+  */
+
+  const boardgameReturn = {
+    bggGameId: boardgame.attr?.objectid,
+    yearPublished: boardgame.yearpublished ?? null,
+    minPlayers: Number(boardgame.minplayers) ?? null,
+    maxPlayers: Number(boardgame.maxplayers) ?? null,
+    playingTime: Number(boardgame.playingtime) ?? null,
+    minPlayTime: Number(boardgame.minplaytime) ?? null,
+    maxPlayTime: Number(boardgame.maxplaytime) ?? null,
+    age: Number(boardgame.age) ?? null,
+    titles: buildTitles(boardgame.name),
+    description: boardgame.description ?? null,
+    thumbnail: boardgame.thumbnail ?? null,
+    image: boardgame.image ?? null,
+    boardgameAccessories: buildAccessories(boardgame.boardgameaccessory),
+    boardgamePublishers: buildPublishers(boardgame.boardgamepublisher),
+    cardset: buildCardSet(boardgame.cardset),
+    podcastEpisodes: buildPodcastEpisode(boardgame.boardgamepodcastepisode),
+    honor: buildHonor(boardgame.boardgamehonor),
+    designers: buildDesigners(boardgame.boardgamedesigner),
+    artists: buildArtists(boardgame.boardgameartist),
+    versions: buildVersions(boardgame.boardgameversion),
+    gameFamily: buildGameFamily(boardgame.boardgamefamily),
+    categories: buildCategories(boardgame.boardgamecategory),
+    mechanics: buildMechanics(boardgame.boardgamemechanic),
+    gameTypes: buildGamesSubDomain(boardgame.boardgamesubdomain),
+    implementations: buildImplementations(boardgame.boardgameimplementation),
+  }
+
+  return boardgameReturn;
 
   return {
     gameId: attr?.objectid ?? '',
@@ -44,8 +68,11 @@ const mapperCallback = (boardgame) => {
     boardgameAccessories: buildAccessories(boardgameaccessory),
     boardgamePublishers: buildPublishers(boardgamepublisher),
     cardset: buildCardSet(cardset),
+    podcastEpisodes: buildPodcastEpisode(boardgamepodcastepisode),
+    honor: buildHonor(boardgamehonor),
     designers: buildDesigners(boardgamedesigner),
     artists: buildArtists(boardgameartist),
+    versions: buildVersions(boardgameversion),
     gameFamily: buildGameFamily(boardgamefamily),
     categories: buildCategories(boardgamecategory),
     mechanics: buildMechanics(boardgamemechanic),
@@ -55,7 +82,7 @@ const mapperCallback = (boardgame) => {
 }
 
 const buildAccessories = (accessories) => {
-  if (!accessories) return ''
+  if (!accessories) return []
 
   if (Array.isArray(accessories)) {
     return accessories.map((acc) => ({
@@ -73,7 +100,7 @@ const buildAccessories = (accessories) => {
 }
 
 const buildTitles = (names) => {
-  if (!names) return ''
+  if (!names) return []
 
   if (Array.isArray(names)) {
     return names.map((name) => name.text ?? '')
@@ -83,7 +110,7 @@ const buildTitles = (names) => {
 }
 
 const buildPublishers = (publishers) => {
-  if (!publishers) return ''
+  if (!publishers) return []
 
   if (Array.isArray(publishers)) {
     return publishers.map((publisher) => ({
@@ -101,7 +128,7 @@ const buildPublishers = (publishers) => {
 }
 
 const buildCardSet = (cardset) => {
-  if (!cardset) return ''
+  if (!cardset) return []
 
   if (Array.isArray(cardset)) {
     return cardset.map((set) => ({
@@ -116,8 +143,42 @@ const buildCardSet = (cardset) => {
   ]
 }
 
+const buildPodcastEpisode = (boardgamepodcastepisode) => {
+  if (!boardgamepodcastepisode) return [];
+
+  if (Array.isArray(boardgamepodcastepisode)) {
+    return boardgamepodcastepisode.map(episode => ({
+      id: episode.attr?.objectid ?? '',
+      title: episode.text ?? ''
+    }))
+  }
+
+  return [
+    {
+      id: boardgamepodcastepisode.attr?.objectid ?? ''
+    }
+  ]
+}
+
+const buildHonor = (boardgamehonor) => {
+  if (!boardgamehonor) return [];
+
+  if (Array.isArray(boardgamehonor)) {
+    return boardgamehonor.map(honor => ({
+      id: honor.attr?.objectid ?? '',
+      text: honor.text ?? ''
+    }))
+  }
+
+  return [
+    {
+      id: boardgamehonor.attr?.objectid ?? ''
+    }
+  ]
+}
+
 const buildDesigners = (designers) => {
-  if (!designers) return ''
+  if (!designers) return []
 
   if (Array.isArray(designers)) {
     return designers.map((designer) => ({
@@ -135,7 +196,7 @@ const buildDesigners = (designers) => {
 }
 
 const buildArtists = (artists) => {
-  if (!artists) return ''
+  if (!artists) return []
 
   if (Array.isArray(artists)) {
     return artists.map((artist) => ({
@@ -152,8 +213,26 @@ const buildArtists = (artists) => {
   ]
 }
 
+const buildVersions = (boardgameversion) => {
+  if (!boardgameversion) return []
+
+  if (Array.isArray(boardgameversion)) {
+    return boardgameversion.map((version) => ({
+      title: version.text ?? '',
+      id: version.attr?.objectid ?? '',
+    }))
+  }
+
+  return [
+    {
+      title: boardgameversion.text ?? '',
+      id: boardgameversion.attr?.objectid ?? '',
+    },
+  ]
+}
+
 const buildGameFamily = (family) => {
-  if (!family) return ''
+  if (!family) return []
 
   if (Array.isArray(family)) {
     return family.map((fam) => ({
@@ -171,7 +250,7 @@ const buildGameFamily = (family) => {
 }
 
 const buildCategories = (categories) => {
-  if (!categories) return ''
+  if (!categories) return []
 
   if (Array.isArray(categories)) {
     return categories.map((category) => ({
@@ -189,7 +268,7 @@ const buildCategories = (categories) => {
 }
 
 const buildMechanics = (mechanics) => {
-  if (!mechanics) return ''
+  if (!mechanics) return []
 
   if (Array.isArray(mechanics)) {
     return mechanics.map((mechanic) => ({
@@ -207,7 +286,7 @@ const buildMechanics = (mechanics) => {
 }
 
 const buildGamesSubDomain = (types) => {
-  if (!types) return ''
+  if (!types) return []
 
   if (Array.isArray(types)) {
     return types.map((type) => ({
@@ -225,7 +304,7 @@ const buildGamesSubDomain = (types) => {
 }
 
 const buildImplementations = (implementations) => {
-  if (!implementations) return ''
+  if (!implementations) return []
 
   if (Array.isArray(implementations)) {
     return implementations.map((implementation) => ({

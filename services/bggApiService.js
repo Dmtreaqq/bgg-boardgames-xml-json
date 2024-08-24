@@ -25,7 +25,7 @@ const getNestedIdsArray = (idsString) => {
 
   return idsArray.reduce((acc, _, index, array) => {
     if (index % 100 === 0) {
-      acc.push(array.slice(index, index + 100))
+      acc.push(array.slice(index, index + 20))
     }
 
     return acc
